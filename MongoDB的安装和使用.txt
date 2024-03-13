@@ -1,0 +1,58 @@
+最新版的MongoDB其实只需要安装一个mongo管理工具mongo shell就可以了，简称为mongosh
+其本质上包含了旧版的一些mongos这些客户端使用mongo服务的命令行
+为什么叫mongo服务呢？而不叫MongoDB数据库呢？
+因为Mongo服务是可以使用本地的mongdb数据库，也可以使用Mongodb的altas数据库，也就是云数据库
+
+所以我们的mongosh就是作为一个客户端工具，既可以连接并管理云数据库（通常需要密码）
+也可以连接并管理本地的MongoDB数据库
+使用本地的MongoDB的数据库需要下载一个MongoDB community edition也就是MongoDB社区版
+然后.msi文件双击安装，一路默认，注意选择的是作为网络服务用户身份服务，
+理论上按照这个链接安装就好了https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-windows/
+注意上面的data和log目录就是你这台电脑所有的MongoDB存放的数据库和日志的信息
+某种程度上这就是以前的这种操作
+"C:\Program Files\MongoDB\Server\7.0\bin\mongod.exe" --dbpath="c:\data\db"
+理论上，你可以直接将上面的创建好后的这个server剪切下来放到任何地方，这就是你的本地mongdb数据库
+同时，将这个mongosh文件夹一并复制下来，发给任何一个人，恭喜你，ta也可以使用一份你的复制后的mongdb数据库了，而且你已经将工具发给了ta，ta甚至不用面临该死的网络问题
+
+好的，前面就是安装部分呢，你安装了两个东西，或者两个文件夹，mongosh（一个用来管理mongodb的客户端工具），mongodb社区版（一个本地的MongoDB服务器）
+接下来，就是先启动Mongo服务，说白了，就是打开你本地的27017端口，让它能够连接到你本地mongdb数据库
+然后使用mongosh来进行数据库的crud
+启动Mongo服务，有两种方法，其一是最简单并推荐的，点win然后搜索服务，打开，然后找到mongdb server，然后你就会发现它默认是自动类型的，是的，它等待你的连接！打开浏览器，输入http://localhost:27017/  吧！！  然后你就会发现它提示你“看起来你正在尝试通过http访问本机驱动程序端口上的Mongodb哦”  这代表着你的Mongo本地服务已经开启！你可以使用mongdb数据库了！！
+将这个服务停止，你就会发现这个27017端口访问不了了
+当然你不用的时候，可以关掉这个服务，不过没必要，因为自动类型嘛
+第二中方法就是使用命令行，必须要到存放本地mongo的db和log的那个server目录下，然后
+找到bin(二进制可执行程序），然后cmd，然后输入mongod回车  也有可能是.\mongod，windows嘛
+而且一般你是没有将这个bin文件存到环境变量中的path中滴
+然后没反应？好吧你需要管理员运行cmd，然后到这个Mongo serve目录下，然后
+你需要加一些参数，如--dbpath指定你的数据存放路径  --logpath指定你的的log存放路径 端口啥的也可以指定，不过没必要
+比如这个
+"C:\Program Files\MongoDB\Server\7.0\bin\mongod.exe" --dbpath="C:\Program Files\MongoDB\Server\7.0\data"
+然后打开27017，是的你成功了
+参考这个 https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-windows/
+关掉这个，就停止了数据库的服务，不过还是建议第一种方法吧，简单直接，想关就关，想开就开
+
+然后，你就会想，我辣么大个数据库呢？？？
+别急，你有第一种方案，就是我们的mongosh，到这个文件夹目录下，cmd，然后输入mongosh回车
+等效于mongosh "mongodb://localhost:27017"  然后就连上了
+这个时候你就可以以命令行的形式直接操作你的数据库
+比如db查看当前数据库  show dbs查看所有数据库  use切换数据库
+db.document.insert之类的应有尽有 增删改查嘛
+参考https://www.mongodb.com/docs/mongodb-shell/connect/
+和https://www.mongodb.com/docs/mongodb-shell/crud/
+
+不管除此之外，还有一些成熟的可靠的可视化工具可以替代这些命令行连接和操作数据库
+比如mongodb自家的 compass仪表盘，可以下载下来连接病可视化操作数据库
+又比如jes家的datagrip（这个可以连接很多家数据库），还有vscode的mongdb插件或者
+nosql和database插件，还有一家navicat，貌似要小钱钱
+这些都比较好用，而且容易操作（记住以上的连接和操作数据库包括可视化工具包括mongosh的使用都是建立在mongodb服务已开启，不管是本地的或者是云端的都可以的前提下）
+
+-----------------------
+对MongoDB的一些思考：
+它是nosql，不是说不是sql，也不是说它比mysql少了连表
+而是说它不只是sql，not only sql 。它的数据是json格式（或者叫bson，json的超集），
+更加适合前端的存取，它的语句格式也和js很类似，它高可用，高并发？
+我还不大了解的是它的联表替代方案？它的聚合是什么？
+参考下一个国内的翻译文档https://docs.mongoing.com/
+
+
+
